@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predict & Train Mnist</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>MNIST Trainer & Predictor</h1>
+        <div class="mode-selection">
+            <label><input type="radio" name="mode" value="train" checked>Train</label>
+            <label><input type="radio" name="mode" value="predict">Predict</label>
+        </div>
+        <div id="train-selection" class="controls">
+            Current label: <strong><label for="" id="current-label">0</label></strong>
+        </div>
+        <div class="canvas-wrap">
+            <canvas id="draw-canvas" width="280" height="280"></canvas>
+        </div>
+        <div class="buttons">
+            <button id="submit">Train</button>
+            <button id="clear" type="button">Clear</button>
+        </div>
+        <div id="result"></div>
+    </div>
+    <script>
+        const canvas = document.getElementById("draw-canvas");
+        const ctx = canvas.getContext('2d');
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 20;
+
+        let drawing = false;
+
+        canvas.addEventListener('mousedown', (e) => {
+            drawing = true;
+            ctx.beginPath();
+            ctx.moveTo(e.offsetX, e.offsetY);
+        })
+        canvas.addEventListener('mousemove', (e) => {
+            if(!drawing) return;
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.stroke();
+        });
+        ['mouseup', 'mouseout'].forEach(event => {
+            canvas.addEventListener(event, () => drawing = false);
+        });
+
+        const modeRadios = document.querySelectorAll('input[name="mode"]');
+        const trainControls = document.getElementById('train-controls');
+        modeRadios.forEach(r => r.addEventListener('change', updateMode));
+        
+        function updateMode() {
+            const mode = document.querySelector('input[name="mode"]:checked').value;
+            trainControls.style.display = mode == 'train' ? 'block' : 'none';
+            submitBtn.textContent = mode == 'train' ? 'Train' : 'Predict';
+            result.textContent = '';
+        }
+
+        let currentLabel = 0;
+        const currentLabelEl = document.getElementById('current-label');
+        const submitBtn = document.getElementById('submit');
+        const clearBtn = document.getElementById('clear');
+        const result = document.getElementById('result');
+
+        submitBtn.addEventListener('click', async () => {
+            const mode = document.querySelector('input[name="mode"]:checked').value;
+            const img = await getCanvasBlob();
+
+            if(mode === 'train') {
+                const formData = new FormData();
+                formData.append('blob', img, `${new Date().getTime()}.png`);
+                formData.append('label', currentLabel);
+                await fetch('/train', {
+                    method: 'POST',
+                    body: formData
+                });
+                currentLabel = (currentLabel + 1) % 10;
+                currentLabelEl.textContent = currentLabel;
+            } else {
+                const formData = new FormData();
+                formData.append('blob', img, `${new Date().getTime()}.png`);
+                const res = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                })
+                const { prediction } = await res.json();
+                result.textContent = `Predict: ${prediction}`
+            }
+            clearCanvas();
+        });
+
+        clearBtn.addEventListener('click', clearCanvas);
+
+        function getCanvasBlob() {
+            return new Promise(resolve => {
+                const tmp = document.createElement('canvas');
+                tmp.width = 28;
+                tmp.height = 28;
+                const tctx = tmp.getContext('2d');
+                tctx.drawImage(canvas, 0, 0, 28, 28);
+                tmp.toBlob(blob => resolve(blob), 'image/png');
+            });
+        }
+
+        function clearCanvas() {
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        clearCanvas();
+        updateMode();
+    </script>
+</body>
+</html>
