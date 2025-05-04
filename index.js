@@ -14,7 +14,7 @@ app.post('/train', upload.single('blob'), async (req, res) => {
     const buffer = req.file.buffer;
     const label = parseInt(req.body.label, 10);
     await train(buffer, label);
-    return res.status(200);
+    return res.sendStatus(200);
 })
 
 app.post('/predict', upload.single('blob'), async (req, res) => {

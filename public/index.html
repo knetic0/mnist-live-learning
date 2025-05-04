@@ -50,7 +50,7 @@
         });
 
         const modeRadios = document.querySelectorAll('input[name="mode"]');
-        const trainControls = document.getElementById('train-controls');
+        const trainControls = document.getElementById('train-selection');
         modeRadios.forEach(r => r.addEventListener('change', updateMode));
         
         function updateMode() {
