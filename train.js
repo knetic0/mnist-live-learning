@@ -131,12 +131,12 @@ async function load(path) {
 
 /** 
  * Initializes the model by loading it from a file or creating a new one.
- * @return {void} - A void function.
+ * @return {Promise<void>} - A void function.
 */
-function initializeModel() {
+async function initializeModel() {
     const modelPath = path.join(__dirname, 'model.json');
     if (fs.existsSync(modelPath)) {
-        model = load(modelPath);
+        model = await load(modelPath);
     } else {
         model = createNewModel();
     }
