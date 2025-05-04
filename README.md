@@ -1,1 +1,1 @@
-# turkey-earthquake-mobile-application
+# Mnist Live Deep Learning
