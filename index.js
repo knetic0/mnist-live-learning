@@ -17,7 +17,7 @@ const MODEL_SAVE_INTERVAL = 60 * 60 * 1000; // 1 hour
 
     setInterval(scheduleModelSave, MODEL_SAVE_INTERVAL);
 
-    app.use("/", express.static(path.join(__dirname, 'public')));
+    app.use("/", express.static(path.join(process.cwd(), 'public')));
 
     app.post('/train', upload.single('blob'), async (req, res) => {
         const buffer = req.file.buffer;
