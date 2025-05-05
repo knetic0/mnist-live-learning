@@ -11,6 +11,11 @@
         "src": "/(.*)",
         "dest": "/index.js"
       }
-    ]
+    ],
+    "functions": {
+        "/**": {
+        "excludeFiles": "{.next,*.cache,node_modules,public,app}/**"
+        }
+    }
   }
   
