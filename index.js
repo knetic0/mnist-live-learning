@@ -1,13 +1,21 @@
 const path = require('path');
 const express = require('express');
 const multer = require('multer');
-const { initializeModel, train, predict } = require('./train');
+const { initializeModel, train, predict, save } = require('./train');
 
 const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
 
+const MODEL_SAVE_INTERVAL = 60 * 60 * 1000; // 1 hour
+
 (async () => {
     await initializeModel();
+
+    async function scheduleModelSave() {
+        await save();
+    }
+
+    setInterval(scheduleModelSave, MODEL_SAVE_INTERVAL);
 
     app.use("/", express.static(path.join(__dirname, 'public')));
 
