@@ -1,21 +1,12 @@
 {
     "version": 2,
     "builds": [
-      {
-        "src": "package.json",
-        "use": "@vercel/static-build",
-        "config": { "distDir": "dist" }
-      },
-      {
-        "src": "dist/bundle.js",
-        "use": "@vercel/node"
-      }
+      { "src": "dist/bundle.js", "use": "@vercel/node" }
     ],
     "routes": [
       { "src": "/train",   "dest": "dist/bundle.js" },
       { "src": "/predict", "dest": "dist/bundle.js" },
-      { "src": "/public/(.*)", "dest": "/dist/public/$1" },
-      { "src": "/(.*)",        "dest": "dist/bundle.js" }
+      { "src": "/(.*)",     "dest": "dist/bundle.js" }
     ]
   }
   
