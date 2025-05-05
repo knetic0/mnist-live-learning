@@ -20,10 +20,6 @@ app.use(
   express.static(staticPath)
 );
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(staticPath, 'index.html'));
-  });
-
 app.post('/train', upload.single('blob'), async (req, res) => {
   await train(req.file.buffer, parseInt(req.body.label, 10));
   res.sendStatus(200);
