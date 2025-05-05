@@ -69,10 +69,9 @@
         submitBtn.addEventListener('click', async () => {
             const mode = document.querySelector('input[name="mode"]:checked').value;
             const img = await getCanvasBlob();
-
+            const formData = new FormData();
+            formData.append('blob', img, `${new Date().getTime()}.png`);
             if(mode === 'train') {
-                const formData = new FormData();
-                formData.append('blob', img, `${new Date().getTime()}.png`);
                 formData.append('label', currentLabel);
                 await fetch('/train', {
                     method: 'POST',
@@ -81,8 +80,6 @@
                 currentLabel = (currentLabel + 1) % 10;
                 currentLabelEl.textContent = currentLabel;
             } else {
-                const formData = new FormData();
-                formData.append('blob', img, `${new Date().getTime()}.png`);
                 const res = await fetch('/predict', {
                     method: 'POST',
                     body: formData
