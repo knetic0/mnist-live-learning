@@ -12,9 +12,7 @@
       }
     ],
     "routes": [
-      { "src": "/train",   "dest": "dist/bundle.js" },
-      { "src": "/predict", "dest": "dist/bundle.js" },
-      { "src": "/(.*)",        "dest": "/dist/public/index.html" }
+      { "src": "/(.*)", "dest": "dist/bundle.js" }
     ]
   }
   
