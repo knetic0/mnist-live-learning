@@ -1,33 +1,51 @@
-const path    = require('path');
+const path = require('path');
 const express = require('express');
-const multer  = require('multer');
+const multer = require('multer');
 const { initializeModel, train, predict, save } = require('./train');
 
-const app    = express();
+const app = express();
 const upload = multer({ storage: multer.memoryStorage() });
 
-const MODEL_SAVE_INTERVAL = 1000 * 60 * 60; // 1 saat
+const PORT = process.env.PORT || 3000;
+const MODEL_SAVE_INTERVAL = 1000 * 60 * 60; // 1 hour
 
 (async () => {
-  await initializeModel();
-  setInterval(() => save(), MODEL_SAVE_INTERVAL);
+  try {
+    await initializeModel();
+    setInterval(() => save(), MODEL_SAVE_INTERVAL);
+    console.log('Model initialized successfully');
+  } catch (error) {
+    console.error('Error initializing model:', error);
+  }
 })();
 
 const staticPath = path.join(__dirname, 'public');
-
-app.use(
-  '/', 
-  express.static(staticPath)
-);
+app.use(express.static(staticPath));
 
 app.post('/train', upload.single('blob'), async (req, res) => {
-  await train(req.file.buffer, parseInt(req.body.label, 10));
-  res.sendStatus(200);
+  try {
+    await train(req.file.buffer, parseInt(req.body.label, 10));
+    res.sendStatus(200);
+  } catch (error) {
+    console.error('Training error:', error);
+    res.status(500).send('Training failed');
+  }
 });
 
 app.post('/predict', upload.single('blob'), async (req, res) => {
-  const classId = await predict(req.file.buffer);
-  res.json({ prediction: classId });
+  try {
+    const classId = await predict(req.file.buffer);
+    res.json({ prediction: classId });
+  } catch (error) {
+    console.error('Prediction error:', error);
+    res.status(500).send('Prediction failed');
+  }
 });
 
-module.exports = app;
+if (process.env.VERCEL) {
+  module.exports = app;
+} else {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}

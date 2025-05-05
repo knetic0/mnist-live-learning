@@ -1,17 +1,17 @@
 // webpack.config.js
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
-const CopyPlugin    = require('copy-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   target: 'node',
   entry: './index.js',
   output: {
-    path:    path.resolve(__dirname, 'dist'),
-    filename:'bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js',
     libraryTarget: 'commonjs2'
   },
-  externals: [ nodeExternals() ],
+  externals: [nodeExternals()],
   module: {
     rules: [{
       test: /\.js$/,
@@ -21,11 +21,12 @@ module.exports = {
     }]
   },
   plugins: [
-    // public/ içeriğini dist/public altına kopyala
     new CopyPlugin({
       patterns: [
         { from: 'public', to: 'public' }
       ]
     })
-  ]
-};
+  ],
+  stats: 'verbose',
+  devtool: 'source-map'
+}
