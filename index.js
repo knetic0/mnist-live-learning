@@ -8,6 +8,11 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 const MODEL_SAVE_INTERVAL = 1000 * 60 * 60; // 1 saat
 
+(async () => {
+  await initializeModel();
+  setInterval(() => save(), MODEL_SAVE_INTERVAL);
+})();
+
 app.use(
   '/', 
   express.static(path.join(__dirname, 'public'))
@@ -23,12 +28,4 @@ app.post('/predict', upload.single('blob'), async (req, res) => {
   res.json({ prediction: classId });
 });
 
-(async () => {
-  await initializeModel();
-  setInterval(() => save(), MODEL_SAVE_INTERVAL);
-})();
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+module.exports = app;
