@@ -13,10 +13,16 @@ const MODEL_SAVE_INTERVAL = 1000 * 60 * 60; // 1 saat
   setInterval(() => save(), MODEL_SAVE_INTERVAL);
 })();
 
+const staticPath = path.join(__dirname, 'public');
+
 app.use(
   '/', 
-  express.static(path.join(__dirname, 'public'))
+  express.static(staticPath)
 );
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(staticPath, 'index.html'));
+  });
 
 app.post('/train', upload.single('blob'), async (req, res) => {
   await train(req.file.buffer, parseInt(req.body.label, 10));
