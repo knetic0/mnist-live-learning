@@ -1,39 +1,31 @@
-const path = require('path');
+const path    = require('path');
 const express = require('express');
-const multer = require('multer');
+const multer  = require('multer');
 const { initializeModel, train, predict, save } = require('./train');
 
-const app = express();
+const app    = express();
 const upload = multer({ storage: multer.memoryStorage() });
 
-const MODEL_SAVE_INTERVAL = 60 * 60 * 1000; // 1 hour
+const MODEL_SAVE_INTERVAL = 1000 * 60 * 60; // 1 saat
+
+app.use(
+  '/', 
+  express.static(path.join(__dirname, 'public'))
+);
+
+app.post('/train', upload.single('blob'), async (req, res) => {
+  await train(req.file.buffer, parseInt(req.body.label, 10));
+  res.sendStatus(200);
+});
+
+app.post('/predict', upload.single('blob'), async (req, res) => {
+  const classId = await predict(req.file.buffer);
+  res.json({ prediction: classId });
+});
 
 (async () => {
-    await initializeModel();
+  await initializeModel();
+  setInterval(() => save(), MODEL_SAVE_INTERVAL);
+})();
 
-    async function scheduleModelSave() {
-        await save();
-    }
-
-    setInterval(scheduleModelSave, MODEL_SAVE_INTERVAL);
-
-    app.use("/", express.static(path.join(process.cwd(), 'public')));
-
-    app.post('/train', upload.single('blob'), async (req, res) => {
-        const buffer = req.file.buffer;
-        const label = parseInt(req.body.label, 10);
-        await train(buffer, label);
-        return res.sendStatus(200);
-    })
-
-    app.post('/predict', upload.single('blob'), async (req, res) => {
-        const buffer = req.file.buffer;
-        const classId = await predict(buffer);
-        return res.json({ prediction: classId });
-    })
-
-    const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => {
-        console.log(`Server is running on http://localhost:${PORT}`);
-    });
-})()
+module.exports = app;
