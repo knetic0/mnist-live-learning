@@ -9,18 +9,14 @@ const upload = multer({ storage: multer.memoryStorage() });
 const PORT = process.env.PORT || 3000;
 const MODEL_SAVE_INTERVAL = 1000 * 60 * 60; // 1 hour
 
-(async () => {
-  try {
-    await initializeModel();
-    setInterval(() => save(), MODEL_SAVE_INTERVAL);
-    console.log('Model initialized successfully');
-  } catch (error) {
-    console.error('Error initializing model:', error);
-  }
-})();
+let staticPath;
+if(process.env.NODE_ENV === 'production') {
+  staticPath = path.join(__dirname, '.');
+} else {
+  staticPath = path.join(__dirname, 'public');
+}
 
-const staticPath = path.join(__dirname, 'public');
-app.use(express.static(staticPath));
+app.use('/', express.static(staticPath));
 
 app.post('/train', upload.single('blob'), async (req, res) => {
   try {
@@ -42,10 +38,14 @@ app.post('/predict', upload.single('blob'), async (req, res) => {
   }
 });
 
-if (process.env.VERCEL) {
-  module.exports = app;
-} else {
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-}
+(async () => {
+  await initializeModel();
+  setInterval(() => save(), MODEL_SAVE_INTERVAL);
+  if(process.env.NODE_ENV === 'production') {
+    module.exports = app;
+  } else {
+    app.listen(PORT, () => {
+      console.log(`Server running on port http://localhost:${PORT}`);
+    });
+  }
+})();
