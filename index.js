@@ -11,7 +11,7 @@ const MODEL_SAVE_INTERVAL = 1000 * 60 * 60; // 1 hour
 
 let staticPath;
 if(process.env.NODE_ENV === 'production') {
-  staticPath = path.join(__dirname, '.');
+  staticPath = path.join(__dirname, 'dist');
 } else {
   staticPath = path.join(__dirname, 'public');
 }
