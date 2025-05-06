@@ -38,10 +38,6 @@ app.post('/predict', upload.single('blob'), async (req, res) => {
   }
 });
 
-if(process.env.VERCEL) {
-  module.exports = app;
-} else {
-  app.listen(PORT, () => {
-    console.log(`Server running on port http://localhost:${PORT}`);
-  });
-}
+app.listen(PORT, () => {
+  console.log(`Server running on port http://localhost:${PORT}`);
+});
