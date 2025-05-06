@@ -14,9 +14,13 @@ const MODEL_SAVE_INTERVAL = 1000 * 60 * 60; // 1 hour
   setInterval(() => save(), MODEL_SAVE_INTERVAL);
 })();
 
-const staticPath = path.join(__dirname, 'public');
+const staticPath = path.join(__dirname, process.env.VERCEL ? 'public' : 'dist');
 
 app.use('/', express.static(staticPath));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 app.post('/train', upload.single('blob'), async (req, res) => {
   try {
