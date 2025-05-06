@@ -18,10 +18,6 @@ const staticPath = path.join(__dirname, process.env.VERCEL ? 'public' : 'dist');
 
 app.use('/', express.static(staticPath));
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
-
 app.post('/train', upload.single('blob'), async (req, res) => {
   try {
     await train(req.file.buffer, parseInt(req.body.label, 10));
