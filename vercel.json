@@ -11,10 +11,22 @@
     }
   ],
   "routes": [
-    { "src": "/train",   "methods": ["POST"], "dest": "dist/server.bundle.js" },
-    { "src": "/predict", "methods": ["POST"], "dest": "dist/server.bundle.js" },
-    { "src": "/",        "dest": "dist/index.html" },
-    { "src": "/assets/(.*)", "dest": "dist/assets/$1" },
-    { "src": "/(.*)",    "dest": "dist/$1" }
+    {
+      "src": "^/train$",
+      "methods": ["POST"],
+      "dest": "/dist/server.bundle.js"
+    },
+    {
+      "src": "^/predict$",
+      "methods": ["POST"],
+      "dest": "/dist/server.bundle.js"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "^/(.*)$",
+      "dest": "/dist/index.html"
+    }
   ]
 }
