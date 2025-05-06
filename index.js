@@ -14,7 +14,7 @@ const MODEL_SAVE_INTERVAL = 1000 * 60 * 60; // 1 hour
   setInterval(() => save(), MODEL_SAVE_INTERVAL);
 })();
 
-const staticPath = path.join(__dirname, process.env.VERCEL ? 'public' : 'dist');
+const staticPath = path.join(__dirname, 'public');
 
 app.use('/', express.static(staticPath));
 
