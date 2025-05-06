@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "dist/server.bundle.js",
+      "src": "index.js",
       "use": "@vercel/node"
     },
     {
@@ -14,19 +14,23 @@
     {
       "src": "^/train$",
       "methods": ["POST"],
-      "dest": "/dist/server.bundle.js"
+      "dest": "index.js"
     },
     {
       "src": "^/predict$",
       "methods": ["POST"],
-      "dest": "/dist/server.bundle.js"
+      "dest": "index.js"
     },
     {
       "handle": "filesystem"
     },
     {
+      "src": "^(?:/)?(.*)$",
+      "dest": "dist/$1"
+    },
+    {
       "src": "^/(.*)$",
-      "dest": "/dist/index.html"
+      "dest": "dist/index.html"
     }
   ]
 }
