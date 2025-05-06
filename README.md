@@ -5,8 +5,8 @@
 
 **LIVE-LEARNING** is a real-time, browser-based MNIST digit trainer and predictor built with TensorFlow\.js and Express.js. Users can draw handwritten digits on a canvas, train a convolutional neural network (CNN) model with their own samples, and perform live predictions—all in a seamless web interface.
 
-<img style="width:30rem" alt="image" src="https://github.com/user-attachments/assets/9eb5d799-caae-4011-8e77-6a4c6be04f06" />
-<img style="width:30rem" alt="image" src="https://github.com/user-attachments/assets/0c2b598a-0849-4a20-a84c-40e48ccc0301" />
+<img style="width:20rem" alt="image" src="https://github.com/user-attachments/assets/9eb5d799-caae-4011-8e77-6a4c6be04f06" />
+<img style="width:20rem" alt="image" src="https://github.com/user-attachments/assets/0c2b598a-0849-4a20-a84c-40e48ccc0301" />
 
 ## ✨ Features
 
