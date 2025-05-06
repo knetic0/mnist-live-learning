@@ -30,8 +30,8 @@ Optional:
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/your-username/live-learning.git
-   cd live-learning
+   git clone https://github.com/knetic0/mnist-live-learning.git
+   cd mnist-live-learning
    ```
 
 2. **Install dependencies**
