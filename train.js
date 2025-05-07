@@ -89,7 +89,7 @@ async function train(buffer, label) {
     const xs = preprocess(buffer);
     const ys = toOneHot(label);
     const history = await model.fit(xs, ys, {
-        epochs: 1,
+        epochs: 10,
         batchSize: 1,
         shuffle: false,
         callbacks: [ tf.callbacks.earlyStopping({ monitor: 'loss', patience: 2 }) ]
@@ -113,7 +113,6 @@ async function predict(buffer) {
 }
 
 /**
- * @param {string} path - The file path to save the model.
  * @returns {Promise<void>} - A promise that resolves when the model is saved.
  */
 async function save() {
@@ -126,7 +125,7 @@ async function save() {
  * @returns {Promise<tf.LayersModel>} - A promise that resolves when the model is loaded.
  */
 async function load(path) {
-    return await tf.loadLayersModel(`file://${path}/model.json`);
+    return await tf.loadLayersModel(`file://${path}`);
 }
 
 /** 
