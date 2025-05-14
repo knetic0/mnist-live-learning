@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const tf = require('@tensorflow/tfjs-node');
 
+/** @type {tf.LayersModel} */
 let model;
 
 /**
