@@ -18,7 +18,7 @@ const staticPath = path.join(__dirname, 'public');
 
 app.use('/', express.static(staticPath));
 
-app.post('/train', upload.single('blob'), async (req, res) => {
+app.post('/api/train', upload.single('blob'), async (req, res) => {
   try {
     await train(req.file.buffer, parseInt(req.body.label, 10));
     res.sendStatus(200);
@@ -28,7 +28,7 @@ app.post('/train', upload.single('blob'), async (req, res) => {
   }
 });
 
-app.post('/predict', upload.single('blob'), async (req, res) => {
+app.post('/api/predict', upload.single('blob'), async (req, res) => {
   try {
     const classId = await predict(req.file.buffer);
     res.json({ prediction: classId });

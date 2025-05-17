@@ -73,14 +73,14 @@
             formData.append('blob', img, `${new Date().getTime()}.png`);
             if(mode === 'train') {
                 formData.append('label', currentLabel);
-                await fetch('/train', {
+                await fetch('/api/train', {
                     method: 'POST',
                     body: formData
                 });
                 currentLabel = (currentLabel + 1) % 10;
                 currentLabelEl.textContent = currentLabel;
             } else {
-                const res = await fetch('/predict', {
+                const res = await fetch('/api/predict', {
                     method: 'POST',
                     body: formData
                 })
