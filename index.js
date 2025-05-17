@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const multer = require('multer');
+const serverless = require('serverless-http');
 const { initializeModel, train, predict, save } = require('./train');
 
 const app = express();
@@ -14,9 +15,9 @@ const MODEL_SAVE_INTERVAL = 1000 * 60 * 60; // 1 hour
   setInterval(() => save(), MODEL_SAVE_INTERVAL);
 })();
 
-const staticPath = path.join(__dirname, 'public');
+// const staticPath = path.join(__dirname, 'public');
 
-app.use('/', express.static(staticPath));
+// app.use('/', express.static(staticPath));
 
 app.post('/api/train', upload.single('blob'), async (req, res) => {
   try {
@@ -38,6 +39,5 @@ app.post('/api/predict', upload.single('blob'), async (req, res) => {
   }
 });
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port http://localhost:${PORT}`);
-});
+module.exports = app;
+module.exports.handler = serverless(app);
