@@ -8,6 +8,10 @@
     {
       "src": "public/index.html",
       "use": "@vercel/static"
+    },
+    {
+      "src": "public/assets/css/styles.css",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
