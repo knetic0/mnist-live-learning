@@ -4,8 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "build": "esbuild index.js --bundle --platform=node --target=node16 --external:@tensorflow/tfjs-node --outfile=dist/index.js --minify"
+    "start": "node index.js"
   },
   "author": "Mehmet SOLAK",
   "license": "ISC",
@@ -13,10 +12,6 @@
   "dependencies": {
     "@tensorflow/tfjs-node": "^4.22.0",
     "express": "^5.1.0",
-    "multer": "^1.4.5-lts.2",
-    "serverless-http": "^3.2.0"
-  },
-  "devDependencies": {
-    "esbuild": "^0.25.4"
+    "multer": "^1.4.5-lts.2"
   }
 }
